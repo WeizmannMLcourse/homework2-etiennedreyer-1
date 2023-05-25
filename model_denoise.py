@@ -9,14 +9,22 @@ class DenoiseNet(nn.Module):
     def __init__(self):
         super().__init__()
         
-        ### Add your network layers here...
-        ### You should use nn.Conv2d(), nn.BatchNorm2d(), and nn.ReLU()
-        ### They can be added as seperate layers and cascaded in the forward
-        ### or you can combine them using the nn.Sequential() class and an OrderedDict (very clean!)
+        self.features = nn.Sequential(OrderedDict([
+            ('conv1',   nn.Conv2d(1,20,3,padding=1)),
+            ('norm1',   nn.BatchNorm2d(20)),
+            ('relu1',   nn.ReLU()),
+            ('conv2',   nn.Conv2d(20,40,3,padding=1)),
+            ('norm2',   nn.BatchNorm2d(40)),
+            ('relu2',   nn.ReLU()),
+            ('conv3',   nn.Conv2d(40,20,3,padding=1)),
+            ('norm3',   nn.BatchNorm2d(20)),
+            ('relu3',   nn.ReLU()),
+            ('conv4',   nn.Conv2d(20,1,1,padding=0))
+        ]))
+
         
     def forward(self,x):
         
-        ### Now pass the input image x through the network layers
-        ### Then add the result to the input image (to offset the noise)
-
-        return ### the sum ###
+        out  = self.features(x)
+        out  = out + x
+        return out
