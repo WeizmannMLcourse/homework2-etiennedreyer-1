@@ -1,0 +1,5 @@
+numpy
+torch
+Pillow
+scikit-image
+pytest
